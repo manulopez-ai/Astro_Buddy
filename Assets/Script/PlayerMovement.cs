@@ -20,4 +20,18 @@ public class PlayerMovement : MonoBehaviour
         Vector3 direction = new Vector3 (moveHorizontal, moveVertical, 0);
         transform.Translate(direction * speed * Time.deltaTime);
     }
+
+
+    private void OnTriggerEnter2D( Collider2D other)
+    {
+       if(other.CompareTag("Star"))
+        {
+            score = score + 1;
+
+            Destroy(other.gameObject);
+            Debug.Log("Star collected!");
+            Debug.Log("Score:"+ score); 
+          
+        } 
+    }
 }
