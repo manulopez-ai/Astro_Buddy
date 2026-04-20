@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
             puedeAtacar = true;
         }
 
-        if(puedeAtacar && enemigosDerrotados >= 4
+        if(puedeAtacar && enemigosDerrotados >= 7
          && ! hasWon)
         {
             hasWon = true;
