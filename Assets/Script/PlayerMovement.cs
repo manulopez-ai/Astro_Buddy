@@ -1,7 +1,11 @@
 using System.Collections;
 using NUnit.Framework;
 using TMPro;
+using TMPro;
+
+
 using UnityEngine;
+
 
 public class PlayerMovement : MonoBehaviour
 
@@ -17,11 +21,18 @@ public class PlayerMovement : MonoBehaviour
     public int enemigosDerrotados = 0;
     public int cristales=0;
     public int estrellas =0;
+    public TextMeshProUGUI textScore;
+    public TextMeshProUGUI textMensaje;
+    public TextMeshProUGUI textEstrellas;
+    public TextMeshProUGUI textCristales;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        UpdateTextScore();
+        UpdateEstrellas();
+        UpdateCristales();
         
     }
 
@@ -44,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         {
             hasWon = true;
             Debug.Log("You Won!");
+            ShowNotification("You Won!");
         }
 
         if(isGameOver) return;
@@ -54,8 +66,13 @@ public class PlayerMovement : MonoBehaviour
     {
        if(other.CompareTag("Star"))
         {
+            
             estrellas++;// suma 1 a la variable de estrella
             score = score + 1;
+            UpdateTextScore();
+            UpdateEstrellas();
+
+            ShowNotification("Estrella recogida!");
 
             Destroy(other.gameObject);
             Debug.Log("Star collected!");
@@ -63,14 +80,23 @@ public class PlayerMovement : MonoBehaviour
 
          if(estrellas>= estrellasParaPistola)
             {
+                ShowNotification("Pistola desbloqueada!"); 
+
                 Pistola.SetActive(true);
                 Debug.Log("Pistola desbloqueada");
             }
         } 
         if(other.CompareTag("cristal"))
         {
+          
+         
           cristales++;
           score+=5;
+          UpdateTextScore();
+          UpdateCristales();
+
+          ShowNotification("Cristal recogido!");  
+
           Destroy(other.gameObject);
           Debug.Log("Cristal recogido. Total:"+ cristales);
   
@@ -79,6 +105,7 @@ public class PlayerMovement : MonoBehaviour
 
         if(other.CompareTag("Pistola"))
         {
+            ShowNotification("Pistola recogida!");
             hasPistola = true;
             Destroy(other.gameObject);
             Debug.Log("Pistola recogida");
@@ -89,12 +116,15 @@ public class PlayerMovement : MonoBehaviour
             {   
                 cristales--;// gasta un cristal
                 enemigosDerrotados = enemigosDerrotados + 1; // sumar 1 al contador de enemigos derrotados
+                UpdateCristales();
+                ShowNotification("Enemigo destruido!");
                 Destroy(other.gameObject);
                 Debug.Log("Enemigo destruido");
             }
             else
             {
                 isGameOver =true;
+                ShowNotification("Game Over");
 
                 Debug.Log("Te golpeó un enemigo, Game Over");
 
@@ -118,4 +148,24 @@ public class PlayerMovement : MonoBehaviour
                 UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
             );// vuelve a cargar la escena osea reinicia el juego    
     }
+
+    void UpdateTextScore()
+    {
+        textScore.text = "Score:" + score;
+    }
+
+    void ShowNotification(string message)
+    {
+        textMensaje.text = message;
+    }
+    void UpdateEstrellas()
+    {
+        textEstrellas.text = "Estrellas: " + estrellas + "/10";
+    }
+
+    void UpdateCristales()
+    {
+        textCristales.text = "Cristales: " + cristales + "/7";
+    }
+
 }
